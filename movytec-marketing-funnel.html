@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paquete Marketing IA · movytec · Alberto Torres</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black:   #04080a;
+  --deep:    #060d08;
+  --green:   #0a5c1e;
+  --green2:  #0d7a28;
+  --neon:    #00ff6a;
+  --neon2:   #39ff8f;
+  --gold:    #C9A84C;
+  --gold-l:  #E8C97A;
+  --gold-d:  #8B6914;
+  --white:   #f0f8f2;
+  --muted:   rgba(240,248,242,0.55);
+  --border:  rgba(0,255,106,0.18);
+  --border-g:rgba(201,168,76,0.25);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  font-family: 'Rajdhani', sans-serif;
+  background: var(--black);
+  color: var(--white);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── CURSOR ── */
+.cursor {
+  width:18px; height:18px;
+  border:1.5px solid var(--neon);
+  border-radius:50%;
+  position:fixed; pointer-events:none;
+  z-index:9999; transform:translate(-50%,-50%);
+  transition: transform .1s, background .2s;
+  mix-blend-mode: screen;
+}
+.cursor-dot {
+  width:5px; height:5px;
+  background: var(--neon);
+  border-radius:50%;
+  position:fixed; pointer-events:none;
+  z-index:9999; transform:translate(-50%,-50%);
+}
+
+/* ── GRID OVERLAY ── */
+body::before {
+  content:'';
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(0,255,106,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,106,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ── PARTICLES ── */
+#particles { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+.pt {
+  position:absolute; border-radius:50%;
+  animation: ptFloat var(--d,8s) ease-in-out infinite var(--delay,0s);
+}
+@keyframes ptFloat {
+  0%,100%{ transform:translateY(0) scale(1); opacity:var(--lo,.1); }
+  50%{ transform:translateY(var(--dy,-40px)) scale(1.3); opacity:var(--hi,.5); }
+}
+
+/* ── SECTIONS ── */
+section { position:relative; z-index:2; }
+
+/* ══════════ HERO ══════════ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 6rem 2rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content:'';
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 800px 500px at 50% 40%, rgba(10,92,30,0.35) 0%, transparent 65%),
+    radial-gradient(ellipse 400px 400px at 20% 80%, rgba(201,168,76,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 400px 400px at 80% 20%, rgba(0,255,106,0.05) 0%, transparent 60%);
+  pointer-events:none;
+}
+
+.guru-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  border: 1px solid var(--border);
+  background: rgba(0,255,106,0.05);
+  color: var(--neon);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  padding: 0.5rem 1.4rem;
+  border-radius: 2px;
+  margin-bottom: 2rem;
+  position: relative;
+  animation: fadeDown 1s ease both;
+}
+.guru-badge::before,
+.guru-badge::after {
+  content:''; position:absolute;
+  width:6px; height:6px;
+  background: var(--neon);
+  border-radius:50%;
+  animation: blinkDot 1.5s ease-in-out infinite;
+}
+.guru-badge::before { left:-3px; top:50%; transform:translateY(-50%); }
+.guru-badge::after  { right:-3px; top:50%; transform:translateY(-50%); animation-delay:.75s; }
+
+@keyframes blinkDot { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+.flags { font-size:1.4rem; letter-spacing:.2rem; margin-bottom:.5rem; }
+
+.hero-eyebrow {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.4em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 1.2rem;
+  animation: fadeDown 1s ease 0.15s both;
+}
+
+.hero-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 900;
+  line-height: 1.05;
+  margin-bottom: 0.4rem;
+  animation: fadeDown 1s ease 0.25s both;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.hero-title .line-neon { color: var(--neon); text-shadow: 0 0 30px rgba(0,255,106,0.6); }
+.hero-title .line-gold {
+  color: transparent;
+  -webkit-text-stroke: 1px var(--gold-l);
+  display: block;
+}
+
+.hero-sub-name {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-style: italic;
+  color: var(--gold-l);
+  margin-bottom: 2rem;
+  animation: fadeDown 1s ease 0.35s both;
+}
+
+.hero-desc {
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  color: var(--muted);
+  line-height: 1.9;
+  max-width: 640px;
+  margin: 0 auto 2.5rem;
+  font-weight: 400;
+  animation: fadeDown 1s ease 0.45s both;
+}
+
+/* scan bar */
+.scan-bar {
+  width: 200px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--neon), transparent);
+  margin: 0 auto 2.5rem;
+  animation: scanSlide 2.5s ease-in-out infinite;
+}
+@keyframes scanSlide {
+  0%,100%{ width:60px; opacity:.4; }
+  50%{ width:260px; opacity:1; }
+}
+
+.hero-cta-wrap { animation: fadeDown 1s ease 0.55s both; }
+
+.btn-neon {
+  display: inline-block;
+  border: 1.5px solid var(--neon);
+  background: rgba(0,255,106,0.08);
+  color: var(--neon);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 1.1rem 2.6rem;
+  border-radius: 2px;
+  text-decoration: none;
+  transition: all .25s;
+  position: relative;
+  overflow: hidden;
+}
+.btn-neon::before {
+  content:''; position:absolute; inset:0;
+  background: var(--neon); opacity:0;
+  transition: opacity .25s;
+}
+.btn-neon:hover { color:#040a05; transform:translateY(-3px); box-shadow:0 0 40px rgba(0,255,106,0.5); }
+.btn-neon:hover::before { opacity:1; }
+.btn-neon span { position:relative; z-index:1; }
+
+.btn-gold-solid {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--gold-d), var(--gold), var(--gold-l), var(--gold));
+  background-size: 300% 300%;
+  animation: goldShim 3s ease infinite;
+  color: #08060a;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 1.15rem 2.8rem;
+  border-radius: 2px;
+  text-decoration: none;
+  transition: transform .2s, box-shadow .2s;
+}
+.btn-gold-solid:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 16px 50px rgba(201,168,76,0.5);
+}
+@keyframes goldShim {
+  0%,100%{background-position:0% 50%} 50%{background-position:100% 50%}
+}
+
+@keyframes fadeDown {
+  from{ opacity:0; transform:translateY(-20px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+
+/* ── DIVIDERS ── */
+.ndiv {
+  width:80px; height:1px;
+  background: linear-gradient(90deg, transparent, var(--neon), transparent);
+  margin: 1rem auto 2.5rem;
+}
+.gdiv {
+  width:60px; height:1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 0.8rem auto 2rem;
+}
+
+/* ── SECTION COMMON ── */
+.sec { padding: 6rem 2rem; }
+.sec-inner { max-width: 1080px; margin: 0 auto; }
+
+.eyebrow-neon {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.35em;
+  color: var(--neon);
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 0.8rem;
+}
+.eyebrow-gold {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.35em;
+  color: var(--gold);
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 0.8rem;
+}
+
+.sec-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(1.4rem, 3.5vw, 2.4rem);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+  color: var(--white);
+}
+.sec-title .nt { color: var(--neon); }
+.sec-title .gt { color: var(--gold-l); }
+
+.sec-sub {
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--muted);
+  font-weight: 400;
+  max-width: 600px;
+  margin: 0 auto 3.5rem;
+  line-height: 1.8;
+}
+
+/* ══════════ QUÉ INCLUYE ══════════ */
+.includes-sec {
+  background: linear-gradient(160deg, #060d08 0%, #040a06 100%);
+}
+
+.pkg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.pkg-card {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2rem 1.8rem;
+  background: rgba(0,255,106,0.02);
+  position: relative;
+  overflow: hidden;
+  transition: all .3s;
+}
+.pkg-card::before {
+  content:''; position:absolute;
+  top:0; left:0; right:0; height:2px;
+  background: linear-gradient(90deg, transparent, var(--neon), transparent);
+  opacity:0; transition:opacity .3s;
+}
+.pkg-card:hover {
+  border-color: rgba(0,255,106,0.4);
+  background: rgba(0,255,106,0.05);
+  transform: translateY(-5px);
+}
+.pkg-card:hover::before { opacity:1; }
+
+.pkg-num {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 3rem;
+  font-weight: 900;
+  color: rgba(0,255,106,0.06);
+  position: absolute;
+  top: 0.5rem; right: 1rem;
+  line-height:1;
+}
+.pkg-icon { font-size: 2rem; margin-bottom: 0.8rem; display:block; }
+.pkg-tag {
+  font-family:'Orbitron', sans-serif;
+  font-size:0.6rem;
+  letter-spacing:.15em;
+  color: var(--neon);
+  text-transform:uppercase;
+  border:1px solid var(--border);
+  padding:0.25rem 0.7rem;
+  border-radius:2px;
+  display:inline-block;
+  margin-bottom:0.8rem;
+  background: rgba(0,255,106,0.05);
+}
+.pkg-title {
+  font-family:'Orbitron', sans-serif;
+  font-size:0.95rem;
+  font-weight:700;
+  color: var(--white);
+  margin-bottom: 0.6rem;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+}
+.pkg-desc {
+  font-size:0.88rem;
+  color: var(--muted);
+  line-height:1.8;
+  font-weight:400;
+}
+.gift-card {
+  border-color: var(--border-g);
+  background: rgba(201,168,76,0.03);
+}
+.gift-card::before {
+  background: linear-gradient(90deg, transparent, var(--gold-l), transparent) !important;
+}
+.gift-card .pkg-tag {
+  color: var(--gold-l);
+  border-color: var(--border-g);
+  background: rgba(201,168,76,0.06);
+}
+.gift-card .pkg-num { color: rgba(201,168,76,0.06); }
+
+/* ══════════ BENEFICIOS ══════════ */
+.benefits-sec {
+  background: linear-gradient(180deg, #040a06 0%, #06100a 50%, #040a06 100%);
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.2rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.benefit-item {
+  display: flex;
+  gap: 1.2rem;
+  align-items: flex-start;
+  padding: 1.5rem;
+  border: 1px solid rgba(0,255,106,0.1);
+  border-radius:4px;
+  background: rgba(0,255,106,0.02);
+  transition: all .3s;
+}
+.benefit-item:hover {
+  border-color: rgba(0,255,106,0.3);
+  background: rgba(0,255,106,0.04);
+  transform: translateX(4px);
+}
+.benefit-num {
+  font-family:'Orbitron', sans-serif;
+  font-size:1.4rem;
+  font-weight:900;
+  color: var(--neon);
+  opacity:.5;
+  flex-shrink:0;
+  line-height:1;
+  min-width:32px;
+}
+.benefit-title {
+  font-family:'Orbitron', sans-serif;
+  font-size:0.78rem;
+  font-weight:700;
+  color: var(--gold-l);
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  margin-bottom:0.4rem;
+}
+.benefit-desc {
+  font-size:0.83rem;
+  color: var(--muted);
+  line-height:1.75;
+  font-weight:400;
+}
+
+/* ══════════ AVATAR PREVIEW ══════════ */
+.avatar-sec {
+  background: linear-gradient(160deg, #06100a 0%, #040a06 100%);
+}
+
+.avatar-showcase {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.avatar-circle {
+  width: 90px; height: 90px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1.5px solid var(--border-g);
+  box-shadow: 0 0 20px rgba(201,168,76,0.15);
+  transition: all .3s;
+  position: relative;
+}
+.avatar-circle:hover {
+  transform: scale(1.12);
+  box-shadow: 0 0 35px rgba(201,168,76,0.4);
+  border-color: var(--gold-l);
+  z-index: 2;
+}
+.avatar-circle img {
+  width:100%; height:100%;
+  object-fit:cover;
+  object-position: center 8%;
+  filter: brightness(.95) contrast(1.05) saturate(1.1);
+}
+.avatar-label {
+  text-align:center;
+  font-family:'Orbitron', sans-serif;
+  font-size:0.6rem;
+  letter-spacing:.2em;
+  color: var(--muted);
+  text-transform:uppercase;
+  margin-top:0.4rem;
+}
+
+.avatar-gift-badge {
+  text-align:center;
+  margin-bottom:2rem;
+}
+.avatar-gift-badge span {
+  display:inline-block;
+  background: linear-gradient(135deg, rgba(201,168,76,.15), rgba(201,168,76,.05));
+  border: 1px solid var(--border-g);
+  color: var(--gold-l);
+  font-family:'Orbitron', sans-serif;
+  font-size:0.62rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  padding:.6rem 1.6rem;
+  border-radius:2px;
+}
+
+/* ══════════ POSTS ══════════ */
+.posts-sec {
+  background: linear-gradient(180deg, #040a06 0%, #060d08 100%);
+}
+.posts-grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap:1rem;
+  max-width:900px;
+  margin:0 auto;
+}
+.post-card {
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:1.5rem;
+  background: rgba(0,255,106,0.02);
+  display:flex; gap:1rem; align-items:flex-start;
+  transition: all .3s;
+}
+.post-card:hover {
+  border-color:rgba(0,255,106,.35);
+  background:rgba(0,255,106,.04);
+  transform:translateY(-3px);
+}
+.post-week {
+  font-family:'Orbitron',sans-serif;
+  font-size:.6rem; letter-spacing:.15em;
+  color:var(--neon); text-transform:uppercase;
+  border:1px solid var(--border);
+  padding:.3rem .7rem; border-radius:2px;
+  flex-shrink:0; margin-top:.1rem;
+  white-space:nowrap;
+  background:rgba(0,255,106,.04);
+}
+.post-text {
+  font-size:.85rem;
+  color:var(--muted);
+  line-height:1.7;
+  font-weight:400;
+}
+.post-text strong { color:var(--white); font-weight:600; }
+
+/* ══════════ PRICE ══════════ */
+.price-sec {
+  background: linear-gradient(160deg, #06100a 0%, #040806 100%);
+  position:relative;
+}
+.price-sec::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse 1000px 400px at 50% 50%, rgba(0,255,106,0.05) 0%, transparent 70%);
+  pointer-events:none;
+}
+
+.price-box {
+  max-width:780px; margin:0 auto;
+  border:1px solid var(--border-g);
+  border-radius:6px;
+  padding:4rem 3rem;
+  background:rgba(201,168,76,0.03);
+  position:relative; overflow:hidden;
+  text-align:center;
+}
+.price-box::before {
+  content:''; position:absolute;
+  top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg, transparent, var(--gold-l), transparent);
+}
+.price-box::after {
+  content:''; position:absolute;
+  bottom:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg, transparent, var(--neon), transparent);
+}
+
+.corner-tl, .corner-tr, .corner-bl, .corner-br {
+  position:absolute; width:20px; height:20px;
+  border-color:var(--gold-l); border-style:solid;
+}
+.corner-tl { top:-1px; left:-1px; border-width:2px 0 0 2px; }
+.corner-tr { top:-1px; right:-1px; border-width:2px 2px 0 0; }
+.corner-bl { bottom:-1px; left:-1px; border-width:0 0 2px 2px; }
+.corner-br { bottom:-1px; right:-1px; border-width:0 2px 2px 0; }
+
+.exclusive-badge {
+  display:inline-block;
+  background:rgba(92,26,46,0.5);
+  border:1px solid rgba(255,120,150,.25);
+  color:#ffb3c6;
+  font-family:'Orbitron',sans-serif;
+  font-size:.6rem; letter-spacing:.2em; text-transform:uppercase;
+  padding:.5rem 1.4rem; border-radius:2px;
+  margin-bottom:1.8rem;
+  animation:pricePulse 2.5s ease infinite;
+}
+@keyframes pricePulse {
+  0%,100%{box-shadow:0 0 0 0 rgba(92,26,46,.5)}
+  50%{box-shadow:0 0 0 10px rgba(92,26,46,0)}
+}
+
+.price-title {
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(1.2rem,3vw,2rem);
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--white);
+  margin-bottom:.5rem;
+}
+.price-title .nt { color:var(--neon); }
+
+.price-display { margin:2.5rem 0; }
+.price-old {
+  font-size:1rem; color:rgba(240,248,242,0.3);
+  text-decoration:line-through; margin-bottom:.3rem;
+  font-weight:400;
+  font-family:'Orbitron',sans-serif;
+  letter-spacing:.05em;
+}
+.price-big {
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(4rem,10vw,7rem);
+  font-weight:900;
+  color:var(--gold-l);
+  line-height:1;
+  text-shadow:0 0 60px rgba(201,168,76,0.4);
+}
+.price-big sup { font-size:2.5rem; vertical-align:top; margin-top:1.2rem; }
+.price-label {
+  font-family:'Orbitron',sans-serif;
+  font-size:.65rem; letter-spacing:.2em; color:var(--gold);
+  text-transform:uppercase; margin-top:.5rem;
+}
+
+.price-includes {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:.7rem; margin:2rem 0 2.5rem;
+  text-align:left;
+}
+.pi {
+  display:flex; align-items:flex-start;
+  gap:.6rem; font-size:.83rem;
+  color:rgba(240,248,242,.7); font-weight:400; line-height:1.6;
+}
+.pi-icon { color:var(--neon); flex-shrink:0; font-size:.8rem; margin-top:.15rem; }
+
+.urgency {
+  font-family:'Orbitron',sans-serif;
+  font-size:.62rem; letter-spacing:.15em; text-transform:uppercase;
+  color:rgba(240,248,242,.35); margin-bottom:2rem;
+}
+.urgency b { color:#ff8fa3; }
+
+.payment-note {
+  margin-top:1.5rem;
+  font-size:.75rem; color:rgba(240,248,242,.3);
+  letter-spacing:.08em; line-height:2;
+}
+.payment-note strong { color:rgba(240,248,242,.5); }
+
+/* ══════════ CTA ══════════ */
+.cta-sec {
+  background: linear-gradient(180deg, #040806 0%, #04080a 100%);
+}
+
+.cta-box {
+  max-width:640px; margin:0 auto; text-align:center;
+  border:1px solid var(--border);
+  border-radius:6px; padding:4rem 2.5rem;
+  background:rgba(0,255,106,0.025);
+  position:relative; overflow:hidden;
+}
+.cta-box::before {
+  content:''; position:absolute;
+  top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg, transparent, var(--neon), transparent);
+}
+
+.cta-guru {
+  font-family:'Orbitron',sans-serif;
+  font-size:.62rem; letter-spacing:.3em; text-transform:uppercase;
+  color:var(--neon); margin-bottom:1.2rem;
+}
+.cta-title {
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(1.2rem,3vw,1.9rem);
+  font-weight:900; text-transform:uppercase;
+  letter-spacing:.05em; line-height:1.2;
+  margin-bottom:.5rem; color:var(--white);
+}
+.cta-sub {
+  font-family:'Playfair Display',serif;
+  font-style:italic;
+  font-size:clamp(1rem,2vw,1.3rem);
+  color:var(--gold-l); margin-bottom:1.5rem;
+}
+.cta-desc {
+  font-size:.88rem; color:var(--muted);
+  line-height:1.9; font-weight:400;
+  max-width:440px; margin:0 auto 2.2rem;
+}
+
+.wa-btn {
+  display:inline-flex; align-items:center; gap:.8rem;
+  background:linear-gradient(135deg,#128c3e,#25d366,#75e89c,#25d366);
+  background-size:300% 300%;
+  animation:goldShim 3s ease infinite;
+  color:#04080a; font-family:'Orbitron',sans-serif;
+  font-weight:700; font-size:clamp(.85rem,2vw,1rem);
+  letter-spacing:.1em; text-transform:uppercase;
+  padding:1.2rem 2.6rem; border-radius:3px;
+  text-decoration:none; transition:transform .2s, box-shadow .2s;
+  margin-bottom:1rem;
+}
+.wa-btn:hover {
+  transform:scale(1.04);
+  box-shadow:0 16px 50px rgba(37,211,102,0.45);
+}
+.wa-btn svg { width:22px; height:22px; flex-shrink:0; }
+
+.cta-meta {
+  font-size:.72rem; color:rgba(240,248,242,.3);
+  line-height:2.2; letter-spacing:.08em;
+}
+.cta-meta strong { color:rgba(240,248,242,.55); }
+.cta-meta a { color:var(--gold); text-decoration:none; opacity:.7; }
+.cta-meta a:hover { opacity:1; }
+
+/* ── FUNNEL REFERENCE ── */
+.funnel-ref {
+  display:inline-flex; align-items:center; gap:.5rem;
+  border:1px solid var(--border);
+  background:rgba(0,255,106,.04);
+  color:var(--neon);
+  font-family:'Orbitron',sans-serif;
+  font-size:.58rem; letter-spacing:.15em; text-transform:uppercase;
+  padding:.5rem 1.2rem; border-radius:2px;
+  text-decoration:none; margin-top:1.2rem;
+  transition:all .2s;
+}
+.funnel-ref:hover { background:rgba(0,255,106,.1); border-color:rgba(0,255,106,.4); }
+
+/* ── FOOTER ── */
+footer {
+  text-align:center; padding:2.5rem 2rem;
+  border-top:1px solid rgba(0,255,106,0.08);
+  font-size:.7rem; color:rgba(240,248,242,.22);
+  letter-spacing:.1em; line-height:2.5;
+}
+footer a { color:var(--gold); text-decoration:none; opacity:.6; transition:opacity .2s; }
+footer a:hover { opacity:1; }
+.footer-logo {
+  font-family:'Orbitron',sans-serif;
+  font-size:1.1rem; font-weight:900;
+  color:var(--neon); letter-spacing:.15em;
+  text-shadow:0 0 20px rgba(0,255,106,.5);
+  margin-bottom:.3rem;
+}
+
+/* ── REVEAL ── */
+.reveal {
+  opacity:0; transform:translateY(30px);
+  transition:opacity .8s ease, transform .8s ease;
+}
+.reveal.vis { opacity:1; transform:translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media(max-width:700px){
+  .price-includes { grid-template-columns:1fr; }
+  .cta-box { padding:2.8rem 1.5rem; }
+  .price-box { padding:2.5rem 1.5rem; }
+  .avatar-circle { width:72px; height:72px; }
+  .pkg-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- cursor -->
+<div class="cursor" id="cur"></div>
+<div class="cursor-dot" id="curd"></div>
+
+<!-- particles -->
+<div id="particles"></div>
+
+<!-- ════════════ HERO ════════════ -->
+<section class="hero">
+  <div class="guru-badge">
+    <span>⬡</span> Marketing IA · Powered by movytec <span>⬡</span>
+  </div>
+  <div class="flags">🇨🇦🇺🇸🇲🇽</div>
+  <div class="hero-eyebrow">Alberto Torres · Guru del Marketing Digital</div>
+  <h1 class="hero-title">
+    <span class="line-neon">Potencia tus ventas</span>
+    <span class="line-gold">con IA</span>
+  </h1>
+  <div class="hero-sub-name">Paquete de Marketing para Partners Vital Health</div>
+  <div class="scan-bar"></div>
+  <p class="hero-desc">
+    Una solución de alto impacto diseñada con inteligencia artificial para que recuperes tu inversión desde tus primeras ventas — y construyas una presencia magnética que trabaja por ti mes tras mes.
+  </p>
+  <div class="hero-cta-wrap">
+    <a class="btn-gold-solid" href="https://wa.me/522214282564" target="_blank">
+      <span>Quiero este paquete ahora →</span>
+    </a>
+  </div>
+</section>
+
+<!-- ════════════ QUÉ INCLUYE ════════════ -->
+<section class="sec includes-sec">
+  <div class="sec-inner">
+    <div class="reveal">
+      <p class="eyebrow-neon">// sistema completo</p>
+      <h2 class="sec-title">Lo que incluye tu <span class="nt">paquete</span></h2>
+      <div class="ndiv"></div>
+      <p class="sec-sub">Tres herramientas de marketing de alto impacto integradas en un solo sistema, diseñadas con IA para partners de Vital Health</p>
+    </div>
+    <div class="pkg-grid">
+
+      <div class="pkg-card reveal">
+        <span class="pkg-num">01</span>
+        <span class="pkg-icon">🌐</span>
+        <div class="pkg-tag">Entregable 01</div>
+        <div class="pkg-title">Funnel de Ventas Premium</div>
+        <div class="pkg-desc">
+          Una landing page de alto impacto diseñada con IA, personalizada para tu servicio y ciudad. Estructura magnética con puntos de dolor, propuesta irresistible, super promoción y CTA directo para agendar. Lista para publicar en GitHub Pages en minutos.<br><br>
+          <em style="color:var(--neon);font-size:.8rem;">→ Ve un ejemplo real:</em><br>
+          <a class="funnel-ref" href="https://tinyurl.com/escanerlupitacastillo" target="_blank">
+            ◆ Ver funnel ejemplo
+          </a>
+        </div>
+      </div>
+
+      <div class="pkg-card reveal" style="transition-delay:.1s">
+        <span class="pkg-num">02</span>
+        <span class="pkg-icon">🚀</span>
+        <div class="pkg-tag">Entregable 02</div>
+        <div class="pkg-title">Flyer de Punta de Lanza</div>
+        <div class="pkg-desc">
+          Diseño profesional de alto impacto optimizado para WhatsApp, Facebook e Instagram. Visualmente irresistible con tu imagen personal, logo, precio y CTA. El arma perfecta para lanzar tu campaña desde el primer día y capturar atención en 3 segundos.
+        </div>
+      </div>
+
+      <div class="pkg-card gift-card reveal" style="transition-delay:.2s">
+        <span class="pkg-num">★</span>
+        <span class="pkg-icon">🎁</span>
+        <div class="pkg-tag">BONO REGALO</div>
+        <div class="pkg-title">Avatar IA · 8 Opciones de Imagen</div>
+        <div class="pkg-desc">
+          Tu marca personal elevada con inteligencia artificial. Recibes 8 versiones de avatar profesional con diferentes estilos y looks para empoderar tu presencia en redes sociales. Tú eliges el que más conecta con tu audiencia ideal.
+        </div>
+      </div>
+
+      <div class="pkg-card reveal" style="transition-delay:.15s">
+        <span class="pkg-num">03</span>
+        <span class="pkg-icon">📱</span>
+        <div class="pkg-tag">Entregable 03</div>
+        <div class="pkg-title">5 Posts Magnéticos · 30 días</div>
+        <div class="pkg-desc">
+          Un mes completo de contenido estratégico listo para publicar. 5 posts diseñados con copywriting magnético para WhatsApp, Facebook e Instagram que generan interés, engagement y leads — sin que tengas que pensar qué publicar.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ BENEFICIOS ════════════ -->
+<section class="sec benefits-sec">
+  <div class="sec-inner">
+    <div class="reveal">
+      <p class="eyebrow-gold">// por qué funciona</p>
+      <h2 class="sec-title">7 razones por las que este paquete <span class="gt">transforma</span> tu negocio</h2>
+      <div class="gdiv"></div>
+      <p class="sec-sub">Herramientas concretas que generan resultados desde la primera semana — y recuperas tu inversión con tus primeras ventas</p>
+    </div>
+    <div class="benefits-grid">
+
+      <div class="benefit-item reveal">
+        <div class="benefit-num">01</div>
+        <div>
+          <div class="benefit-title">ROI desde la primera venta</div>
+          <div class="benefit-desc">Con solo 1-2 clientes del servicio de escaneo cuántico ($50 USD c/u) ya recuperas tu inversión. Todo lo demás es ganancia pura desde el día uno.</div>
+        </div>
+      </div>
+
+      <div class="benefit-item reveal" style="transition-delay:.08s">
+        <div class="benefit-num">02</div>
+        <div>
+          <div class="benefit-title">Presencia de alto impacto</div>
+          <div class="benefit-desc">Tu funnel y flyer te posicionan como un profesional serio desde el primer contacto — generando confianza y autoridad antes de que el cliente te llame.</div>
+        </div>
+      </div>
+
+      <div class="benefit-item reveal" style="transition-delay:.16s">
+        <div class="benefit-num">03</div>
+        <div>
+          <div class="benefit-title">Sistema replicable mes a mes</div>
+          <div class="benefit-desc">No es un diseño de un solo uso. El funnel, el flyer y los posts son una máquina que puedes activar cada mes con mínimo esfuerzo para seguir generando ventas constantes.</div>
+        </div>
+      </div>
+
+      <div class="benefit-item reveal" style="transition-delay:.08s">
+        <div class="benefit-num">04</div>
+        <div>
+          <div class="benefit-title">Marca personal poderosa</div>
+          <div class="benefit-desc">Los 8 avatares IA te dan una imagen profesional de alto nivel que compite con grandes marcas — diferenciándote de todos los demás partners del mercado.</div>
+        </div>
+      </div>
+
+      <div class="benefit-item reveal" style="transition-delay:.16s">
+        <div class="benefit-num">05</div>
+        <div>
+          <div class="benefit-title">Contenido listo para usar</div>
+          <div class="benefit-desc">Los 5 posts magnéticos eliminan el bloqueo creativo. Publicas con confianza, consistencia y estrategia — sin perder tiempo pensando qué decir.</div>
+        </div>
+      </div>
+
+      <div class="benefit-item reveal">
+        <div class="benefit-num">06</div>
+        <div>
+          <div class="benefit-title">Alcance multi-plataforma</div>
+          <div class="benefit-desc">Todo el sistema está optimizado para WhatsApp, Facebook e Instagram — donde están tus clientes. Un mismo paquete cubre todos los canales clave sin esfuerzo extra.</div>
+        </div>
+      </div>
+
+      <div class="benefit-item reveal" style="transition-delay:.08s">
+        <div class="benefit-num">07</div>
+        <div>
+          <div class="benefit-title">Personalización total con IA</div>
+          <div class="benefit-desc">Cada pieza es 100% personalizada para ti, tu ciudad y tu mercado. No es una plantilla genérica — es tu estrategia única diseñada con inteligencia artificial.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ AVATAR PREVIEW ════════════ -->
+<section class="sec avatar-sec">
+  <div class="sec-inner">
+    <div class="reveal">
+      <p class="eyebrow-gold">// bono regalo incluido</p>
+      <h2 class="sec-title">Tu avatar <span class="gt">IA</span> · 8 opciones de marca</h2>
+      <div class="gdiv"></div>
+    </div>
+    <div class="avatar-gift-badge reveal">
+      <span>✦ &nbsp; Valor $200 USD · Incluido sin costo extra &nbsp; ✦</span>
+    </div>
+    <!-- 8 circles pulling from the avatar collage image, showing different crop offsets -->
+    <div class="avatar-showcase reveal">
+      <div>
+        <div class="avatar-circle" style="border-color:rgba(0,255,106,0.5)">
+          <img src="https://i.ibb.co/0jB7qQBk/VH-ESCABER-LINDA.jpg" style="object-position:50% 5%">
+        </div>
+        <div class="avatar-label">Opción 1</div>
+      </div>
+      <div>
+        <div class="avatar-circle">
+          <img src="https://i.ibb.co/0jB7qQBk/VH-ESCABER-LINDA.jpg" style="object-position:48% 3%">
+        </div>
+        <div class="avatar-label">Opción 2</div>
+      </div>
+      <div>
+        <div class="avatar-circle">
+          <img src="https://i.ibb.co/0jB7qQBk/VH-ESCABER-LINDA.jpg" style="object-position:52% 7%">
+        </div>
+        <div class="avatar-label">Opción 3</div>
+      </div>
+      <div>
+        <div class="avatar-circle">
+          <img src="https://i.ibb.co/0jB7qQBk/VH-ESCABER-LINDA.jpg" style="object-position:46% 4%">
+        </div>
+        <div class="avatar-label">Opción 4</div>
+      </div>
+      <div>
+        <div class="avatar-circle">
+          <img src="https://i.ibb.co/0jB7qQBk/VH-ESCABER-LINDA.jpg" style="object-position:54% 6%">
+        </div>
+        <div class="avatar-label">Opción 5</div>
+      </div>
+      <div>
+        <div class="avatar-circle">
+          <img src="https://i.ibb.co/0jB7qQBk/VH-ESCABER-LINDA.jpg" style="object-position:50% 2%">
+        </div>
+        <div class="avatar-label">Opción 6</div>
+      </div>
+      <div>
+        <div class="avatar-circle">
+          <img src="https://i.ibb.co/0jB7qQBk/VH-ESCABER-LINDA.jpg" style="object-position:50% 8%">
+        </div>
+        <div class="avatar-label">Opción 7</div>
+      </div>
+      <div>
+        <div class="avatar-circle">
+          <img src="https://i.ibb.co/0jB7qQBk/VH-ESCABER-LINDA.jpg" style="object-position:50% 10%">
+        </div>
+        <div class="avatar-label">Opción 8</div>
+      </div>
+    </div>
+    <p class="sec-sub reveal" style="margin-top:1.5rem;margin-bottom:0">
+      Cada partner recibe 8 versiones únicas de su imagen personal generadas con IA — para que elija la que mejor conecta con su audiencia ideal en redes sociales.
+    </p>
+  </div>
+</section>
+
+<!-- ════════════ POSTS ════════════ -->
+<section class="sec posts-sec">
+  <div class="sec-inner">
+    <div class="reveal">
+      <p class="eyebrow-neon">// contenido estratégico</p>
+      <h2 class="sec-title">5 <span class="nt">posts magnéticos</span> · 30 días</h2>
+      <div class="ndiv"></div>
+      <p class="sec-sub">Copywriting diseñado con IA para generar interés, confianza y acción en tu audiencia — listo para publicar desde el día uno</p>
+    </div>
+    <div class="posts-grid">
+      <div class="post-card reveal">
+        <div class="post-week">Sem 1</div>
+        <div class="post-text"><strong>Post de Impacto:</strong> Tu historia y el "¿por qué?" detrás del escáner cuántico. Genera curiosidad y rompe el hielo con tu audiencia.</div>
+      </div>
+      <div class="post-card reveal" style="transition-delay:.08s">
+        <div class="post-week">Sem 2</div>
+        <div class="post-text"><strong>Post Educativo:</strong> "¿Qué puede detectar el escáner en 10 minutos?" — educa, asombra y posiciona tu servicio como único.</div>
+      </div>
+      <div class="post-card reveal" style="transition-delay:.16s">
+        <div class="post-week">Sem 3</div>
+        <div class="post-text"><strong>Post de Dolor:</strong> Los 5 síntomas que el cuerpo da antes de enfermarse — y cómo detectarlos antes de que sea tarde.</div>
+      </div>
+      <div class="post-card reveal" style="transition-delay:.08s">
+        <div class="post-week">Sem 4</div>
+        <div class="post-text"><strong>Post de Testimonio:</strong> Historia de transformación real. Genera confianza y prueba social que convierte seguidores en clientes.</div>
+      </div>
+      <div class="post-card reveal" style="transition-delay:.16s">
+        <div class="post-week">Cierre</div>
+        <div class="post-text"><strong>Post de Oferta:</strong> La promoción del mes con urgencia real. CTA directo para agendar y cerrar ventas este mes.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ PRECIO ════════════ -->
+<section class="sec price-sec">
+  <div class="sec-inner">
+    <div class="price-box reveal">
+      <div class="corner-tl"></div><div class="corner-tr"></div>
+      <div class="corner-bl"></div><div class="corner-br"></div>
+
+      <div class="exclusive-badge">✦ &nbsp; Inversión única · Pago anticipado &nbsp; ✦</div>
+
+      <h2 class="price-title">
+        Paquete <span class="nt">Marketing IA</span><br>Partners Vital Health
+      </h2>
+      <div class="gdiv"></div>
+
+      <div class="price-display">
+        <div class="price-old">Valor real del mercado: $2,400 USD</div>
+        <div class="price-big"><sup>$</sup>980</div>
+        <div class="price-label">USD · pago anticipado · todo incluido</div>
+      </div>
+
+      <div class="price-includes">
+        <div class="pi"><span class="pi-icon">◆</span><span>Funnel de ventas premium personalizado</span></div>
+        <div class="pi"><span class="pi-icon">◆</span><span>Flyer punta de lanza para redes sociales</span></div>
+        <div class="pi"><span class="pi-icon" style="color:var(--gold)">★</span><span>Avatar IA · 8 opciones de imagen (BONO)</span></div>
+        <div class="pi"><span class="pi-icon">◆</span><span>5 posts magnéticos listos para 30 días</span></div>
+        <div class="pi"><span class="pi-icon">◆</span><span>Diseño 100% personalizado con IA</span></div>
+        <div class="pi"><span class="pi-icon">◆</span><span>Optimizado para WhatsApp, FB e Instagram</span></div>
+        <div class="pi"><span class="pi-icon">◆</span><span>Entrega exprés · Todo listo en 48-72 hrs</span></div>
+        <div class="pi"><span class="pi-icon">◆</span><span>Sistema replicable mes a mes</span></div>
+      </div>
+
+      <div class="urgency">⚡ Cupos limitados · <b>Disponibilidad esta semana</b> · Agenda tu llamada hoy</div>
+
+      <a class="btn-gold-solid" href="https://wa.me/522214282564?text=Hola%20Alberto%2C%20quiero%20el%20Paquete%20Marketing%20IA%20para%20Vital%20Health" target="_blank">
+        <span>Lo quiero — contáctame ahora →</span>
+      </a>
+
+      <div class="payment-note">
+        <strong>Pago anticipado</strong> · Transferencia / Zelle / PayPal<br>
+        Facturable · Aplica 🇨🇦 Canadá · 🇺🇸 USA · 🇲🇽 México
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ CTA FINAL ════════════ -->
+<section class="sec cta-sec">
+  <div class="cta-box reveal">
+    <div class="cta-guru">// alberto torres · guru del marketing digital</div>
+    <h2 class="cta-title">¿Listo para activar<br>tu sistema de ventas?</h2>
+    <div class="cta-sub">Escríbeme hoy — empezamos esta semana</div>
+    <p class="cta-desc">
+      Un solo mensaje es todo lo que necesitas. Te explico el proceso, resuelvo tus dudas y entregamos todo en 48–72 horas. Tu negocio no puede esperar.
+    </p>
+
+    <a class="wa-btn" href="https://wa.me/522214282564?text=Hola%20Alberto%2C%20quiero%20el%20Paquete%20Marketing%20IA%20para%20Vital%20Health" target="_blank">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      WhatsApp: 52 221 428 2564
+    </a>
+
+    <div><br></div>
+
+    <div class="cta-meta">
+      <strong>Alberto Torres</strong> · Creador de Contenido & Guru del Marketing Digital<br>
+      <a href="mailto:movytec@gmail.com">movytec@gmail.com</a><br>
+      Disponible 🇨🇦 Canadá · 🇺🇸 USA · 🇲🇽 México
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ FOOTER ════════════ -->
+<footer>
+  <div class="footer-logo">MOVYTEC</div>
+  <div style="font-size:.65rem;color:rgba(0,255,106,.3);letter-spacing:.3em;margin-bottom:.5rem">
+    · MARKETING IA · DISEÑO DIGITAL · BRANDING ·
+  </div>
+  Diseñado con IA por <a href="mailto:movytec@gmail.com">movytec@gmail.com</a> &nbsp;·&nbsp;
+  <a href="https://wa.me/522214282564">WhatsApp: 52 221 428 2564</a><br>
+  <span style="font-size:.62rem;opacity:.3">© 2026 · Alberto Torres · movytec · Todos los derechos reservados · 🇨🇦 🇺🇸 🇲🇽</span>
+</footer>
+
+<script>
+/* ── cursor ── */
+const cur = document.getElementById('cur');
+const curd = document.getElementById('curd');
+let mx=0,my=0,cx=0,cy=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
+(function loop(){
+  cx += (mx-cx)*.15; cy += (my-cy)*.15;
+  cur.style.left = cx+'px'; cur.style.top = cy+'px';
+  curd.style.left = mx+'px'; curd.style.top = my+'px';
+  requestAnimationFrame(loop);
+})();
+
+/* ── particles ── */
+const pf = document.getElementById('particles');
+const colors = ['#00ff6a','#C9A84C','#39ff8f','#E8C97A'];
+for(let i=0;i<60;i++){
+  const p = document.createElement('div');
+  const sz = Math.random()*3+1;
+  const c = colors[Math.floor(Math.random()*colors.length)];
+  p.className='pt';
+  p.style.cssText=`
+    width:${sz}px;height:${sz}px;
+    background:${c};
+    left:${Math.random()*100}%;
+    top:${Math.random()*100}%;
+    --d:${(Math.random()*8+4).toFixed(1)}s;
+    --delay:-${(Math.random()*10).toFixed(1)}s;
+    --dy:-${(Math.random()*60+20).toFixed(0)}px;
+    --lo:${(Math.random()*.08).toFixed(3)};
+    --hi:${(Math.random()*.4+.05).toFixed(3)};
+  `;
+  pf.appendChild(p);
+}
+
+/* ── reveal ── */
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('vis'); });
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
